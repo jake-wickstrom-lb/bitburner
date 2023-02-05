@@ -1,5 +1,5 @@
-import {NS} from "Bitburner";
-import {TermLogger} from "/lib/Helpers";
+import {NS} from "Bitburner"
+import {TermLogger} from "/lib/Helpers"
 
 /** 
  * @param {NS} ns 
