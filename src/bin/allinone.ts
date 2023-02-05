@@ -3,9 +3,9 @@ import {TermLogger} from "/lib/Helpers"
 
 /** 
  * @param {NS} ns 
- * @param {string} target the target server
- * @param {number} moneyThresh how much money the server should have before we hack it
- * @param {number} securityThresh weaken the server below this security before hacking
+ * @args {string} target the target server
+ * @args {number} moneyThresh how much money the server should have before we hack it
+ * @args {number} securityThresh weaken the server below this security before hacking
  */
 export async function main(ns: NS) {
   let logger = new TermLogger(ns)
