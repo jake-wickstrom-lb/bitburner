@@ -2,7 +2,7 @@ import {NS, Server} from "Bitburner"
 import { getAllServers } from 'lib/discover.js'
 
 /** @param {NS} ns */
-export async function main(ns) {
+export async function main(ns: NS) {
 	ns.write('deploylogs.txt', '', 'w')	
 
 	let script = '/scripts/allinone.js'

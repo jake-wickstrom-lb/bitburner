@@ -9,7 +9,6 @@ export async function main(ns) {
 		if(server.hasAdminRights !== true) {
 			openPorts(ns, server)
 		}
-		
 	}
 
 	ns.write('network.txt', JSON.stringify(network), 'w')
