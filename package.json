@@ -1,14 +1,16 @@
 {
   "scripts": {
-    "build": "npm-run-all buildTs copyResources buildManifest",
+    "build": "npm-run-all buildTs buildManifest",
     "buildTs": "tsc -p tsconfig.json",
-    "buildManifest": "bin/generateManifest.bash",
+    "buildManifest": "bash bin/generateManifest.sh",
     "clean": "rm -rf build/*",
-    "copyResources": "mkdir -p src/resources && cp -r src/resources/ build/",
-    "re": "npm-run-all clean buildTs copyResources buildManifest",
+    "re": "npm-run-all clean buildTs buildManifest",
     "webserver": "node bin/webserver.js -p 9182 -d build --enable_cors"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "copyfiles": "^2.4.1",
+    "mkdirp": "^2.1.3",
+    "npm-run-all": "^4.1.5",
+    "npx": "^10.2.2"
   }
 }

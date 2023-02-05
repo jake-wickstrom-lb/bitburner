@@ -3,6 +3,7 @@
 cd ./build || exit
 
 rm -f resources/manifest.txt
+mkdir -p resources
 touch resources/manifest.txt
 
 nsFile=$(find . -type f -name "*.js" -not -name "*Bitburner.t*")
