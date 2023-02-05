@@ -40,7 +40,7 @@ export async function main(ns: NS) {
 	ns.write('deploylogs.txt', `LEVEL: ${ns.getHackingLevel()}\n`, 'a')
 
 	for (let server of network) {
-		ns.scp(script, server.hostname)
+		ns.scp(script, 'home', server.hostname)
 
 		let threads = getThreadCount(ns, server, script)
 
