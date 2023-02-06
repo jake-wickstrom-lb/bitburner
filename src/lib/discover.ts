@@ -1,5 +1,4 @@
-import {NS, Server} from "Bitburner"
-import {TermLogger} from "/lib/Helpers"
+import { NS, Server } from "./Bitburner"
 
 /** @param {NS} ns */
 export function getAllServers(ns: NS): Server[] {

@@ -1,4 +1,4 @@
-import {NS, Server} from "Bitburner"
+import { NS } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
 /** Grow the target server one time 

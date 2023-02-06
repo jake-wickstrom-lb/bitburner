@@ -1,4 +1,4 @@
-import {NS, Server} from "Bitburner"
+import { NS } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
 /** Weaken the target server one time 

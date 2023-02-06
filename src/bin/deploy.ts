@@ -1,5 +1,5 @@
-import {NS, Server} from "Bitburner"
 import { getAllServers } from 'lib/discover.js'
+import { NS, Server } from '/lib/Bitburner'
 
 /** @param {NS} ns */
 export async function main(ns: NS) {

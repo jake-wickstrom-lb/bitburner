@@ -1,4 +1,4 @@
-import { NS } from "Bitburner"
+import { NS } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
 const HACK_SCRIPT = '/bin/hack-once.js'
@@ -60,20 +60,18 @@ export async function main(ns: NS) {
 		let wt = ns.formulas.hacking.weakenTime(so, po)
 		let gt = ns.formulas.hacking.growTime(so, po)
 
-		let hwRatio = Math.ceil(ns.hackAnalyzeSecurity(1, target, home.cpuCores) / ns.weakenAnalyze(1, home.cpuCores))
+		let hwRatio = Math.ceil(ns.hackAnalyzeSecurity(1, target) / ns.weakenAnalyze(1, home.cpuCores))
 		let gwRatio = Math.ceil(ns.growthAnalyzeSecurity(1, target, home.cpuCores) / ns.weakenAnalyze(1, home.cpuCores))
-
-		let hgRatio = ns.hackAnalyze()
 
 		// HWGW - 200
 
 		let hpid1 = ns.run(HACK_SCRIPT, 1, target)
 
-		ns.sleep(gt + 200)
+		await ns.sleep(gt + 200)
 
 		let wpid1 = ns.run(WEAKEN_SCRIPT, 1 * hwRatio, target)
 
-		ns.sleep()
+		ns.sleep(0)
 
 		let gpid1 = ns.run(GROW_SCRIPT)
 	}

@@ -1,4 +1,5 @@
-import {NS, Server} from "Bitburner"
+
+import { NS } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
 /** Hack the target server one time 

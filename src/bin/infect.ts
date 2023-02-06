@@ -1,4 +1,4 @@
-import {NS, Server} from "Bitburner"
+import { NS, Server } from '/lib/Bitburner'
 import { getAllServers } from '/lib/discover'
 
 /** @param {NS} ns */
