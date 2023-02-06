@@ -11,6 +11,7 @@ export async function main(ns: NS) {
 
 	for (let server of network) {
 		ns.scp(script, server.hostname)
+    ns.scp('/lib/Helpers.js', server.hostname)
 
 		if (server.hasAdminRights === true) {
       switch(script) {
