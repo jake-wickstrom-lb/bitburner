@@ -1,4 +1,4 @@
-import {NS} from "Bitburner";
+import { NS } from "/lib/Bitburner";
 import {TermLogger} from "/lib/Helpers";
 
 /** @param {NS} ns **/

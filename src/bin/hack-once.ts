@@ -1,4 +1,3 @@
-
 import { NS } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
@@ -19,12 +18,12 @@ export async function main(ns: NS) {
   }
 
   if(typeof ns.args[1] !== 'number') {
-    logger.err(`Money Threshold ${ns.args[1]} is not a number! Exiting...`)
+    logger.err(`Delay ${ns.args[1]} is not a number! Exiting...`)
     return
   }
 
   if(typeof ns.args[2] !== 'boolean') {
-    logger.err(`Security Threshold ${ns.args[2]} is not a boolean! Exiting...`)
+    logger.err(`Debug ${ns.args[2]} is not a boolean! Exiting...`)
     return
   }
 

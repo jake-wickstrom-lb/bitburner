@@ -1,4 +1,4 @@
-import {NS} from "Bitburner";
+import { NS } from "/lib/Bitburner";
 
 const params = {
     baseUrl: "http://localhost:9182/",

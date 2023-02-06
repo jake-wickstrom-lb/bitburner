@@ -1,4 +1,4 @@
-import type {NS} from "Bitburner";
+import { NS } from "/lib/Bitburner";
 import {RepoInit} from "/lib/Helpers";
 
 export async function main(ns: NS) {

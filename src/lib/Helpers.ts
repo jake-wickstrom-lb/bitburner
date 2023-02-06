@@ -1,4 +1,4 @@
-import {NS} from "Bitburner";
+import { NS } from "./Bitburner";
 
 const ReadText = {
     readLines(ns: NS, file: string): string[] {

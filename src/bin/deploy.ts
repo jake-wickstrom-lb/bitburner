@@ -1,13 +1,75 @@
 import { getAllServers } from 'lib/discover.js'
 import { NS, Server } from '/lib/Bitburner'
+import { TermLogger } from '/lib/Helpers'
 
 /** @param {NS} ns */
 export async function main(ns: NS) {
-	ns.write('deploylogs.txt', '', 'w')	
+	let script = getScriptToDeploy(ns)
+  let network = getAllServers(ns).filter((server) => {
+		return server.hostname !== 'home'
+	})
 
-	let script = '/scripts/allinone.js'
-	let network = getAllServers(ns)
+	for (let server of network) {
+		ns.scp(script, server.hostname)
 
+		if (server.hasAdminRights === true) {
+      switch(script) {
+        case "/bin/allinone.js":
+          deployAllInOne(ns, server, network)
+          break
+        case "/bin/share.js":
+          deployShare(ns, server)
+          break
+      }
+		}
+	}
+}
+
+/** @param {NS} ns */
+function getThreadCount(ns: NS, server: Server, script: string) {
+	let scriptram = ns.getScriptRam(script)
+	return Math.floor((server.maxRam - ns.getServerUsedRam(server.hostname)) / scriptram)
+}
+
+function deployAllInOne(ns: NS, server: Server, network: Server[]) {
+  let script = '/bin/allinone.js'
+  let threads = getThreadCount(ns, server, script)
+  let target = getBestTarget(ns, network)
+
+	let securityThresh = target.minDifficulty + 5
+	let moneyThresh = target.moneyMax * 0.95
+
+  if(threads > 0) {
+    let execcode = ns.exec(script, server.hostname, threads, target.hostname, moneyThresh, securityThresh)
+
+    if (execcode === 0) {
+      ns.tprint(`ERROR: Could not start ${script} on ${server.hostname} (${threads} threads)`)
+      ns.write('deploylogs.txt', `Could not start ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
+    } else {
+      ns.tprint(`DEPLOY: Started ${script} on ${server.hostname} (${threads} threads)`)
+      ns.write('deploylogs.txt', `Started ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
+    }
+  }
+}
+
+function deployShare(ns: NS, server: Server) {
+  let script = '/bin/share.js'
+  let threads = getThreadCount(ns, server, script)
+
+  if (threads > 0) {
+    let execcode = ns.exec(script, server.hostname, threads)
+
+    if (execcode === 0) {
+      ns.tprint(`ERROR: Could not start ${script} on ${server.hostname} (${threads} threads)`)
+      ns.write('deploylogs.txt', `Could not start ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
+    } else {
+      ns.tprint(`DEPLOY: Started ${script} on ${server.hostname} (${threads} threads)`)
+      ns.write('deploylogs.txt', `Started ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
+    }
+  }
+}
+
+function getBestTarget(ns: NS, network: Server[]) {
 	network = network.filter((server) => {
 		return server.hostname !== 'home'
 	})
@@ -24,45 +86,18 @@ export async function main(ns: NS) {
 	if(ns.args[0]) {
 		targetlist = network.filter((server) => { return ns.args[0] ? server.hostname === ns.args[0] : true })
 	}
+  
+  let target = targetlist[0] ?? n00dles
 
-	ns.write('deploylogs.txt', `LIST: ${JSON.stringify(targetlist)}\n`, 'a')
-
-	let target = targetlist[0] ?? n00dles
-	let securityThresh = target.minDifficulty + 5
-	let moneyThresh = target.moneyMax * 0.95
-
-	ns.tprint(`TARGET: ${target.hostname}`)
-	ns.tprint(`LEVEL: ${target.requiredHackingSkill}`)
-	ns.tprint(`SECURITY TARGET: ${securityThresh}`)
-	ns.tprint(`MONEY TARGET: ${moneyThresh}`)
-
-	ns.write('deploylogs.txt', `TARGET: ${target.hostname}\n`, 'a')
-	ns.write('deploylogs.txt', `LEVEL: ${ns.getHackingLevel()}\n`, 'a')
-
-	for (let server of network) {
-		ns.scp(script, 'home', server.hostname)
-
-		let threads = getThreadCount(ns, server, script)
-
-		if (threads > 0 && server.hasAdminRights === true) {
-			let execcode = ns.exec(script, server.hostname, threads, target.hostname, moneyThresh, securityThresh)
-
-			if (execcode === 0) {
-				ns.tprint(`ERROR: Could not start ${script} on ${server.hostname} (${threads} threads)`)
-				ns.write('deploylogs.txt', `Could not start ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
-			} else {
-				ns.tprint(`DEPLOY: Started ${script} on ${server.hostname} (${threads} threads)`)
-				ns.write('deploylogs.txt', `Started ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
-			}
-		} else {
-			ns.tprint(`ERROR: Could not start ${script} on ${server.hostname} (${threads} threads)`)
-			ns.write('deploylogs.txt', `Could not start ${script} on ${server.hostname} (${threads} threads)\n`, 'a')
-		}
-	}
+  return target
 }
 
-/** @param {NS} ns */
-function getThreadCount(ns: NS, server: Server, script: string) {
-	let scriptram = ns.getScriptRam(script, server.hostname)
-	return Math.floor((server.maxRam - ns.getServerUsedRam(server.hostname)) / scriptram)
+function getScriptToDeploy(ns: NS) {
+  switch(ns.args[1]) {
+    case 'share': 
+      return '/bin/share.js'
+    case 'allinone':
+    default:
+      return '/bin/allinone.js'
+  }
 }

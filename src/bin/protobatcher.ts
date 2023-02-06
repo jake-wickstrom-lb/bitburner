@@ -1,4 +1,4 @@
-import { NS } from "/lib/Bitburner"
+import { NS, Server } from "/lib/Bitburner"
 import { TermLogger } from "/lib/Helpers"
 
 const HACK_SCRIPT = '/bin/hack-once.js'
@@ -64,10 +64,7 @@ export async function main(ns: NS) {
 		let gwRatio = Math.ceil(ns.growthAnalyzeSecurity(1, target, home.cpuCores) / ns.weakenAnalyze(1, home.cpuCores))
 
 		// HWGW - 200
-
-		let hpid1 = ns.run(HACK_SCRIPT, 1, target)
-
-		await ns.sleep(gt + 200)
+		let hpid1 = ns.run(HACK_SCRIPT, 1, target, so.hostname, 0, true)
 
 		let wpid1 = ns.run(WEAKEN_SCRIPT, 1 * hwRatio, target)
 
@@ -79,15 +76,11 @@ export async function main(ns: NS) {
 	
 }
 
-async function runAfter(ns, script, threads, delay, ...args) {
-	setTimeout(() => { return ns.run(script, threads, ...args) }, delay)
-}
-
 /**
  * Returns true if the server is prepared (max money & min security)
  * @param {Server} so 
  */
-function isPrepared(so) {
+function isPrepared(so: Server) {
 	return isMinSecurity(so) && isMaxMoney(so)
 }
 
@@ -96,7 +89,7 @@ function isPrepared(so) {
  * @param {NS} ns 
  * @param {Server} so 
  */
-function isMinSecurity(so) {
+function isMinSecurity(so: Server) {
 	return so.minDifficulty === so.hackDifficulty
 }
 
